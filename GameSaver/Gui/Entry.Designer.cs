@@ -1,6 +1,6 @@
 ﻿namespace GameSaver
 {
-    partial class Form1
+    partial class Entry
     {
         /// <summary>
         /// Required designer variable.

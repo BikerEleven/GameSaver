@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GameSaver.Logic;
 
 namespace GameSaver
 {
@@ -14,9 +15,12 @@ namespace GameSaver
         [STAThread]
         static void Main()
         {
+            BackupFileProvider.CreateProvider();
+            GameProfileProvider.CreateProvider();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Entry());
         }
     }
 }
