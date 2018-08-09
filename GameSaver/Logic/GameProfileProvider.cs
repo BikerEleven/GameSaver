@@ -58,6 +58,7 @@ namespace GameSaver.Logic
         public void RemoveBackupFile(GameProfile profile)
         {
 
+            BackupFileProvider.GetProvider().DeleteBranch(profile.id);
         }
 
         /// <summary>

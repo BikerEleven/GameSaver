@@ -11,7 +11,7 @@ namespace GameSaver.Logic
     class BackupFileProvider
     {
 
-        private Dictionary<Guid, BackupFile> files;
+        private Dictionary<Guid, List<BackupFile>> files;
         private static BackupFileProvider instance;
 
         /// <summary>
@@ -44,9 +44,14 @@ namespace GameSaver.Logic
         /// </summary>
         /// <param name="byProfile">GameProfile to filter by</param>
         /// <returns>Enumerator of BackupFiles relating to the provided profile</returns>
-        public IEnumerator<BackupFile> GetFiles(GameProfile byProfile)
+        public IReadOnlyList<BackupFile> GetFiles(Guid byProfile)
         {
-            return files.Values.Where( file => file.gameId == byProfile.id ).GetEnumerator();
+            if (files.TryGetValue(byProfile, out List<BackupFile> ilist))
+            {
+                return ilist;
+            }
+
+            return new List<BackupFile>(0);
         }
 
         /// <summary>
@@ -64,7 +69,20 @@ namespace GameSaver.Logic
         /// <param name="file">File to remove</param>
         public void RemoveBackupFile(BackupFile file)
         {
+            
+        }
 
+        /// <summary>
+        /// This will remove all the backups associated with a game profile.
+        /// </summary>
+        /// <param name="profileID">The profile to remove from our storage</param>
+        internal void DeleteBranch(Guid profileID)
+        {
+            if (files.ContainsKey(profileID))
+            {
+                foreach (var bak in GetFiles(profileID)) RemoveBackupFile(bak);
+                files.Remove(profileID);
+            }
         }
 
         /// <summary>
